@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pokemon PC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="gba-frame">
+  <div class="pc-screen">
+
+
+    <div class="top-bar">
+      <div class="pkmn-data-title">
+        <span class="wave">~</span>PKMN DATA<span class="wave">~</span>
+      </div>
+      <button id="viewToggleBtn" class="pill-btn pill-green">PARTY POKéMON</button>
+      <button id="addBtn" class="pill-btn pill-blue">CATCH POKéMON</button>
+      <button id="customBtn" class="pill-btn pill-gold">CUSTOM POKéMON</button>
+    </div>
+
+
+    <div class="box-nav" id="boxNav">
+      <button class="arrow-btn" id="prevBox">◀</button>
+      <div class="box-label-strip">
+        <input type="text" class="box-label" id="boxLabel" value="Box 1" maxlength="20" />
+      </div>
+      <button class="arrow-btn" id="nextBox">▶</button>
+    </div>
+
+    <div class="main-body">
+
+
+      <aside class="data-panel">
+        <div class="sprite-window">
+          <img id="dataSprite" src="" alt="" class="hidden-sprite"/>
+          <div id="spritePlaceholder" class="checker"></div>
+        </div>
+        <div class="data-info" id="dataInfo">
+          <p class="placeholder-text">Select a Pokémon</p>
+        </div>
+      </aside>
+
+
+      <section class="box-area">
+        <div class="box-grid" id="boxGrid"></div>
+      </section>
+    </div>
+
+
+    <div class="action-tray" id="actionTray"></div>
+
+
+    <div class="bottom-bar" id="bottomBar"></div>
+
+  </div>
+</div>
+
+
+<div id="addModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-title">DEPOSIT POKéMON</div>
+    <p class="modal-hint">Search PokéAPI by name or Pokédex number.</p>
+    <div class="modal-row">
+      <div class="autocomplete-wrap">
+        <input id="lookupInput" type="text" placeholder="e.g. charizard or 6" autocomplete="off" />
+        <div id="suggestBox" class="suggest-box hidden"></div>
+      </div>
+      <button id="lookupBtn" class="pill-btn pill-blue small">SEARCH</button>
+    </div>
+    <div id="lookupResult" class="lookup-result"></div>
+    <div class="modal-buttons">
+      <button id="catchBtn" class="pill-btn pill-green small hidden">CATCH!</button>
+      <button id="closeAddModal" class="pill-btn pill-grey small">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="customModal" class="modal-overlay hidden">
+  <div class="modal-box wide">
+    <div class="modal-title">CREATE CUSTOM POKéMON</div>
+    <div class="custom-fields">
+      <label>Name</label>
+      <input id="customName" type="text" maxlength="30" placeholder="e.g. Pikachu-Cap" />
+      <label>Nickname (optional)</label>
+      <input id="customNickname" type="text" maxlength="30" />
+      <div class="custom-types">
+        <div><label>Type 1</label><select id="customType1"></select></div>
+        <div><label>Type 2</label><select id="customType2"></select></div>
+      </div>
+    </div>
+    <label class="custom-label">Base stats (1 to 255)</label>
+    <div id="customStats" class="custom-stats"></div>
+    <div class="modal-buttons">
+      <button id="createCustomBtn" class="pill-btn pill-green small">CREATE!</button>
+      <button id="closeCustomModal" class="pill-btn pill-grey small">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="compareModal" class="modal-overlay hidden">
+  <div class="modal-box wide">
+    <div class="modal-title">COMPARE STATS</div>
+    <div class="compare-pickers">
+      <select id="compareA"></select>
+      <span class="vs">VS</span>
+      <select id="compareB"></select>
+    </div>
+    <button id="doCompareBtn" class="pill-btn pill-blue small">COMPARE</button>
+    <div id="compareResult" class="compare-result"></div>
+    <div class="modal-buttons">
+      <button id="closeCompareModal" class="pill-btn pill-grey small">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="movesModal" class="modal-overlay hidden">
+  <div class="modal-box wide">
+    <div class="modal-title" id="movesTitle">MOVES</div>
+    <div id="movesBody" class="moves-body"></div>
+    <div class="modal-buttons">
+      <button id="closeMovesModal" class="pill-btn pill-grey small">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

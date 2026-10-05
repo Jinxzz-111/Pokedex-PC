@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edit Pokémon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Figtree:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <span class="lens" aria-hidden="true"></span>
+    <h1>Edit Pokémon</h1>
+  </header>
+
+  <p id="message" class="message" role="status"></p>
+
+  <div class="wrap narrow">
+    <section class="panel">
+      <div id="who" class="who"></div>
+
+      <div class="field">
+        <label for="nickname">Nickname</label>
+        <input id="nickname" maxlength="30" />
+      </div>
+      <div class="field">
+        <label for="level">Level (1 to 100)</label>
+        <input id="level" type="number" min="1" max="100" />
+      </div>
+      <div class="field">
+        <label for="notes">Notes</label>
+        <textarea id="notes" rows="4"></textarea>
+      </div>
+
+      <label class="check"><input type="checkbox" id="favorite" /> Favorite</label>
+      <label class="check"><input type="checkbox" id="inTeam" /> On my team (max 6)</label>
+
+      <div class="actions">
+        <button id="saveBtn" class="primary" disabled>Save changes</button>
+        <a class="button" href="index.html">Cancel</a>
+      </div>
+    </section>
+  </div>
+
+  <script src="common.js"></script>
+  <script>
+
+    const id = new URLSearchParams(location.search).get("id");
+
+
+    async function loadPokemon() {
+      try {
+        const list = await api("/api/pokemon");
+        const p = list.find((x) => x.id == id);
+        if (!p) {
+          showMessage("That Pokémon was not found. It may have been released.", true);
+          return;
+        }
+
+        const who = $("who");
+        who.appendChild(makeSprite(p));
+        const info = el("div");
+        info.appendChild(el("h2", pretty(p.name)));
+        const chips = el("div", null, "chips");
+        p.types.forEach((t) => chips.appendChild(typeChip(t)));
+        info.appendChild(chips);
+        who.appendChild(info);
+
+        $("nickname").value = p.nickname || "";
+        $("level").value = p.level;
+        $("notes").value = p.notes || "";
+        $("favorite").checked = p.favorite;
+        $("inTeam").checked = p.inTeam;
+        $("saveBtn").disabled = false;
+      } catch (err) {
+        showMessage(err.message, true);
+      }
+    }
+
+
+    async function savePokemon() {
+      try {
+        await send("PUT", "/api/pokemon/" + id, {
+          nickname: $("nickname").value.trim(),
+          level: Number($("level").value),
+          notes: $("notes").value.trim(),
+          favorite: $("favorite").checked,
+          inTeam: $("inTeam").checked,
+        });
+        window.location.href = "index.html";
+      } catch (err) {
+        showMessage(err.message, true);
+      }
+    }
+
+    $("saveBtn").addEventListener("click", savePokemon);
+    loadPokemon();
+  </script>
+</body>
+</html>
